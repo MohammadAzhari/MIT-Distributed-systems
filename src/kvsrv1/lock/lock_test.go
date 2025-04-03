@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"6.5840/kvsrv1"
+	kvsrv "6.5840/kvsrv1"
 	"6.5840/kvsrv1/rpc"
-	"6.5840/kvtest1"
+	kvtest "6.5840/kvtest1"
 )
 
 const (
@@ -26,9 +26,11 @@ func oneClient(t *testing.T, me int, ck kvtest.IKVClerk, done chan struct{}) kvt
 		case <-done:
 			return kvtest.ClntRes{i, 0}
 		default:
+			// fmt.Printf("%d: here\n", i)
+
 			lk.Acquire()
 
-			// log.Printf("%d: acquired lock", me)
+			// fmt.Printf("%d: acquired lock\n", me)
 
 			b := strconv.Itoa(me)
 			val, ver, err := ck.Get("l0")
@@ -52,7 +54,7 @@ func oneClient(t *testing.T, me int, ck kvtest.IKVClerk, done chan struct{}) kvt
 				t.Fatalf("%d: put failed %v", me, err)
 			}
 
-			// log.Printf("%d: release lock", me)
+			// fmt.Printf("%d: release lock\n", me)
 
 			lk.Release()
 		}
